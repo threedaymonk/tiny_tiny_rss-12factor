@@ -4,11 +4,13 @@
 	// *******************************************
 
 	define('DB_TYPE', "pgsql"); // or mysql
-	define('DB_HOST', "localhost");
-	define('DB_USER', "fox");
-	define('DB_NAME', "fox");
-	define('DB_PASS', "XXXXXX");
-	define('DB_PORT', ''); // usually 5432 for PostgreSQL, 3306 for MySQL
+
+	$db_url = parse_url(getenv('DATABASE_URL'));
+	define('DB_HOST', $db_url['host']);
+	define('DB_USER', $db_url['user']);
+	define('DB_PASS', $db_url['pass']);
+	define('DB_NAME', substr($db_url['path'], 1));
+	define('DB_PORT', $db_url['port'] || '');
 
 	define('MYSQL_CHARSET', 'UTF8');
 	// Connection charset for MySQL. If you have a legacy database and/or experience
