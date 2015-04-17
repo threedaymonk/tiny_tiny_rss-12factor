@@ -3,7 +3,6 @@
 *.DS_Store
 #*
 .idea/*
-config.php
 feed-icons/*
 cache/*/*
 lock/*
