@@ -49,6 +49,8 @@ The following limitations currently apply:
 On Dokku, you will need the [dokku-shoreman][shoreman] plugin to run the
 background daemon process, and some kind of PostgreSQL plugin (I recommend
 [dokku-psql-single-container][psql]).
+You'll also have to deploy once (and let it fail) to create the app before you
+can set up the database and other environment variables.
 
 Ensure that you have configured a database (this varies depending on your
 platform and plugins) and that `DATABASE_URL` is set (it should look something
