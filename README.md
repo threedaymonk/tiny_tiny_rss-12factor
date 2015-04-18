@@ -23,6 +23,68 @@ Copyright (c) 2005 Andrew Dolgov (unless explicitly stated otherwise).
 
 Uses Silk icons by Mark James: http://www.famfamfam.com/lab/icons/silk/
 
+## Notes on this fork
+
+This fork has been modified to follow the [twelve-factor app][12factor]
+principles so that it can be deployed to [Heroku][heroku], [Dokku][dokku], etc.
+
+In particular, the following changes have been made:
+
+* The web install script has been removed and `config.php` added.
+* The database and self-URL are configured via environment variables.
+* `composer.json` has been added to build the necessary environment.
+* `Procfile` has been added and contains lines for the web server and the
+  background daemon.
+
+The following limitations currently apply:
+
+* Favicons are lost on deployment.
+* Only PostgreSQL is supported as a database, although it would in principle be
+  straightforward to implement support for MySQL as well.
+* Sphinx and SMTP settings are not read from the environment and thus cannot be
+  used at present.
+
+### Deployment
+
+On Dokku, you will need the [dokku-shoreman][shoreman] plugin to run the
+background daemon process, and some kind of PostgreSQL plugin (I recommend
+[dokku-psql-single-container][psql]).
+
+Ensure that you have configured a database (this varies depending on your
+platform and plugins) and that `DATABASE_URL` is set (it should look something
+like `postgresql://user:pass@hostname/dbname`).
+
+Install the database schema: on Dokku with dokku-psql-single-container:
+
+```sh
+$ ssh server psql:console < schema/ttrss_schema_pgsql.sql
+```
+
+or on Heroku:
+
+```sh
+$ heroku pg:psql < schema/ttrss_schema_pgsql.sql
+```
+
+Set the `SELF_URL_PATH` environment variable to the public URL of your
+application.
+
+Deploy this branch via Git:
+
+```sh
+$ git remote add production user@host:repository
+$ git push production 12factor:master
+```
+
+Visit your installation, log in as `admin` with the password `password` (Tiny
+Tiny RSS's default), and set the password to something more sensible!
+
+[12factor]: http://12factor.net/
+[heroku]: https://www.heroku.com/
+[dokku]: http://progrium.viewdocs.io/dokku
+[shoreman]: https://github.com/statianzo/dokku-shoreman
+[psql]: https://github.com/Flink/dokku-psql-single-container
+
 ## Requirements
 
 * Compatible web browser (http://tt-rss.org/wiki/CompatibleBrowsers)
